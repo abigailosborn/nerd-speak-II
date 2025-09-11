@@ -31,6 +31,8 @@ public class Lexer{
             System.out.println("Incorrect file extension");
         }
 
+        boolean seen_star = false;
+
         while(!current_line.equals("I cast fireball")){
             for(int i = 0; i < words.length; i++){
                 //indentify dice
@@ -39,19 +41,22 @@ public class Lexer{
                     tokens.add(new Token(Token.TokenType.DICE, words[i]));
                 }
                 else if(words[i].equals("*")){
-                    String str = "";
-                    //while there is not another asterix add each word to the value of the Token
-                    while(words.length > i + 1 && !words[i + 1].equals("*")){
-                        str += words[i + 1];
-                        
-                        //add in spaces after each word
-                        i++;
-                        if(!words[i + 1].equals("*")){
-                            str += " ";
+                    if(!seen_star){
+                        String str = "";
+                        //while there is not another asterix add each word to the value of the Token
+                        while(words.length > i + 1 && !words[i + 1].equals("*")){
+                            str += words[i + 1];
+                            
+                            //add in spaces after each word
+                            i++;
+                            if(!words[i + 1].equals("*")){
+                                str += " ";
+                            }
+                            
                         }
-                        
+                        tokens.add(new Token(Token.TokenType.LANGUAGE, str));
                     }
-                    tokens.add(new Token(Token.TokenType.LANGUAGE, str));
+                    seen_star = !seen_star;
                 }
                 //silvery barbs for subtraction
                 else if(words[i].equals("silvery-barbs")){
@@ -69,21 +74,21 @@ public class Lexer{
                 else if(words[i].equals("decompose")){
                     tokens.add(new Token(Token.TokenType.DIVIDE, "/"));
                 }
-                else if(words[i].equals("DC")){
+                else if(words[i].equals("roll")){
                     tokens.add(new Token(Token.TokenType.EQUAL, "="));
                 }
                 //this is the equivalent of (), it is for FUNCTION CALLS
                 else if(words[i].equals("/*")){
-                    tokens.add(new Token(Token.TokenType.LPAREN, "/*"));
-                }
-                 else if(words[i].equals("*\\")){
-                    tokens.add(new Token(Token.TokenType.RPAREN, "*\\"));
+                    tokens.add(new Token(Token.TokenType.TILDE, "~"));
                 }
                 else if(words[i].equals(",")){
                     tokens.add(new Token(Token.TokenType.COMMA, ","));
                 }
-                else if(words[i].equals("I") || words[i].equals("cast")){
-                    tokens.add(new Token(Token.TokenType.DRIVEL, words[i]));
+                else if(words[i].equals("cast")){
+                    tokens.add(new Token(Token.TokenType.FUNCTION_CALL, "funny"));
+                }
+                else if(words[i].equals("bag_of_holding")){
+                    tokens.add(new Token(Token.TokenType.BAG_OF_HOLDING, "array"));
                 }
                 //store other words, the parser will handle this later 
                 else{
@@ -98,7 +103,7 @@ public class Lexer{
 
         for(Token token: tokens){
             System.out.println(token.type + " " + token.value);
-        }
+        } 
 
     }
     public static void read_input(String file_name){

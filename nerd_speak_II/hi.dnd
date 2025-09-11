@@ -1,4 +1,7 @@
-strength DC d4 
-strength bless d6
-* these are words *
+strength roll d4
+I cast message 
+verbal component * hi *
+strength bless d10
+torch roll d12
+bag_of_holding bag1 
 I cast fireball

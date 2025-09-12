@@ -1,8 +1,6 @@
-strength roll d4
+strength roll d20
 I cast message
-verbal_component * hi *
-strength bless d10
-torch roll d12
-sleep roll * hello *
-bag_of_holding bag1 
+material_component strength
+I cast message
+verbal_component * let's gooooooooooo *
 I cast fireball

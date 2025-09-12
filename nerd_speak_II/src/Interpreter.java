@@ -7,12 +7,13 @@ public class Interpreter {
     public static ArrayList<Material> user_int_variables = new ArrayList<Material>();
     public static void main(String[] args){
         Parser parse = new Parser();
-        the_stack = parse.the_stack_tm;
         parse.parse_code();
-
+        the_stack = parse.the_stack_tm;
+        Token working_token = the_stack.pop();
         //iterate through and parse each stack token
         while(the_stack.size() > 0){
-            parse_token(the_stack.pop());
+            parse_token(working_token);
+            working_token = the_stack.pop();
         }
 
     }
@@ -38,14 +39,33 @@ public class Interpreter {
                 }
                 break;
             case FUNCTION_CALL:
+            //get the name of the function being called
                 Token function_name = the_stack.pop();
+
+                //print function
                 if(function_name.value.equals("message")){
-                    //code for if message is called 
+                    Token verbal_or_material = the_stack.pop();
                     Token next_token = the_stack.pop();
-                    next_token = the_stack.pop();
+                    //check to see if it is just a string or a variable
                     switch(next_token.type){
                         case LANGUAGE:
                             System.out.println(next_token.value);
+                            break;
+                        case IDENTIFIER:
+                            if((verbal_or_material.value).equals("verbal_component")){
+                                for(int i = 0; i < user_String_variables.size(); i++){
+                                    if((next_token.value).equals((user_String_variables.get(i)).name)){
+                                        System.out.println(user_String_variables.get(i).value);
+                                    }
+                                }
+                            }
+                            else if((verbal_or_material.value).equals("material_component")){
+                                for(int i = 0; i < user_int_variables.size(); i++){
+                                    if(next_token.value.equals(user_int_variables.get(i).name)){
+                                        System.out.println(user_int_variables.get(i).value);
+                                    }
+                                }
+                            }
                             break;
                     }
                 }

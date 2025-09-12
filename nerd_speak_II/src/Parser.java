@@ -13,11 +13,12 @@ public class Parser {
         token_list = lex.tokens;
         the_stack_tm = make_stack();
         //print out stack for debugging purposes
-        
+        /* 
         System.out.println("\nThe Stack:");
         for(Token t: the_stack_tm){
             System.out.println(t.type + " " + t.value);
         }
+        */
         
         
     }

@@ -100,10 +100,11 @@ public class Lexer{
            current_line = file_scan.nextLine();
            words = current_line.split(" ");
         }
-
+        /* 
         for(Token token: tokens){
             System.out.println(token.type + " " + token.value);
         } 
+        */
 
     }
     public static void read_input(String file_name){
@@ -115,7 +116,7 @@ public class Lexer{
     }
 
     
-    //get all commands from the file and place tham on the stack
+    //get all commands from the file and place them on the stack
     //public 
 
     //get the extension of the file 
@@ -123,4 +124,5 @@ public class Lexer{
         String[] temp = file_name.split("\\.");
         file_extension = temp[1];
     }
+
 }

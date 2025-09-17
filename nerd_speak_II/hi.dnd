@@ -1,6 +1,10 @@
 strength roll d20
+athletics roll * hello world *
+I cast message
+material_component strength
+strength silvery-barbs d12
 I cast message
 material_component strength
 I cast message
-verbal_component * let's gooooooooooo *
+verbal_component athletics
 I cast fireball

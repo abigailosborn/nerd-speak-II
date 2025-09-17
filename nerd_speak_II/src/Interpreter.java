@@ -9,11 +9,15 @@ public class Interpreter {
         Parser parse = new Parser();
         parse.parse_code();
         the_stack = parse.the_stack_tm;
+        //if(the_stack.size() > 0){
         Token working_token = the_stack.pop();
         //iterate through and parse each stack token
         while(the_stack.size() > 0){
             parse_token(working_token);
-            working_token = the_stack.pop();
+            if(the_stack.size() > 0){
+                working_token = the_stack.pop();
+            }
+            
         }
 
     }
@@ -22,54 +26,24 @@ public class Interpreter {
          switch(current_token.type){
             //handle variable assignments
             case EQUAL:
-                //get the name and the value for the variable
-                Token variable_name = the_stack.pop();
-                Token variable_value = the_stack.pop();
-                //make variable to store the assignment 
-                switch(variable_value.type){
-                    case LANGUAGE:
-                        Verbal new_String_variable = new Verbal(variable_name.value, variable_value.value);
-                        user_String_variables.add(new_String_variable);
-                        break;
-                    case DICE:
-                        int dice_value = get_dice_value(variable_value);
-                        Material new_int_variable = new Material(variable_name.value, Integer.toString(dice_value));
-                        user_int_variables.add(new_int_variable);
-                        break;
-                }
+                assign_variables();
                 break;
+            //handle function calls 
             case FUNCTION_CALL:
             //get the name of the function being called
                 Token function_name = the_stack.pop();
-
                 //print function
                 if(function_name.value.equals("message")){
-                    Token verbal_or_material = the_stack.pop();
-                    Token next_token = the_stack.pop();
-                    //check to see if it is just a string or a variable
-                    switch(next_token.type){
-                        case LANGUAGE:
-                            System.out.println(next_token.value);
-                            break;
-                        case IDENTIFIER:
-                            if((verbal_or_material.value).equals("verbal_component")){
-                                for(int i = 0; i < user_String_variables.size(); i++){
-                                    if((next_token.value).equals((user_String_variables.get(i)).name)){
-                                        System.out.println(user_String_variables.get(i).value);
-                                    }
-                                }
-                            }
-                            else if((verbal_or_material.value).equals("material_component")){
-                                for(int i = 0; i < user_int_variables.size(); i++){
-                                    if(next_token.value.equals(user_int_variables.get(i).name)){
-                                        System.out.println(user_int_variables.get(i).value);
-                                    }
-                                }
-                            }
-                            break;
-                    }
+                    message();
                 }
                 break;
+
+            case PLUS:
+                do_addition();
+
+            case MINUS:
+                do_subtraction();
+
          }
     }
 
@@ -111,8 +85,98 @@ public class Interpreter {
         }
         roll = generate_number(dice_sides);
         return roll;
-        //debug statement
-        //System.out.println("roll: " + roll);
-        //TODO: my code is broken :( it's only rolling one die
+    }
+    //print function 
+    public static void message(){
+        Token verbal_or_material = the_stack.pop();
+        Token next_token = the_stack.pop();
+        //check to see if it is just a string or a variable
+        switch(next_token.type){
+            case LANGUAGE:
+                System.out.println(next_token.value);
+                break;
+            //if the user is printing a variable find the name and get the value
+            case IDENTIFIER:
+                //check if the variable is an integer or a string 
+                if((verbal_or_material.value).equals("verbal_component")){
+                    for(int i = 0; i < user_String_variables.size(); i++){
+                        if((next_token.value).equals((user_String_variables.get(i)).name)){
+                            System.out.println(user_String_variables.get(i).value);
+                        }
+                    }
+                }
+                else if((verbal_or_material.value).equals("material_component")){
+                    for(int i = 0; i < user_int_variables.size(); i++){
+                        if(next_token.value.equals(user_int_variables.get(i).name)){
+                            System.out.println(user_int_variables.get(i).value);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    public static void assign_variables(){
+        //get the name and the value for the variable
+        Token variable_name = the_stack.pop();
+        Token variable_value = the_stack.pop();
+        //make variable to store the assignment 
+        switch(variable_value.type){
+            case LANGUAGE:
+                Verbal new_String_variable = new Verbal(variable_name.value, variable_value.value);
+                user_String_variables.add(new_String_variable);
+                break;
+            case DICE:
+                int dice_value = get_dice_value(variable_value);
+                Material new_int_variable = new Material(variable_name.value, dice_value);
+                user_int_variables.add(new_int_variable);
+                break;
+        }
+    }
+    public static void do_addition(){
+        //define variables for addition
+        Token left_side = the_stack.pop();
+        Token right_side = the_stack.pop();
+        int left = 0;
+        int right = 0;
+        int sum = 0;
+
+        //check to see what is being added to 
+        switch(left_side.type){
+            case IDENTIFIER: 
+                right = get_dice_value(right_side);
+                right = generate_number(right);
+                for(int i = 0; i < user_int_variables.size(); i++){
+                    if(left_side.value.equals(user_int_variables.get(i).name)){
+                        left = user_int_variables.get(i).value;
+                        sum  = left + right;
+                        user_int_variables.get(i).value = sum;
+                    }
+                }
+                break;
+        }
+    }
+    public static void do_subtraction(){
+        //define variables for addition
+        Token left_side = the_stack.pop();
+        Token right_side = the_stack.pop();
+        int left = 0;
+        int right = 0;
+        int total = 0;
+
+        //check to see what is being added to 
+        switch(left_side.type){
+            case IDENTIFIER: 
+                right = get_dice_value(right_side);
+                right = generate_number(right);
+                for(int i = 0; i < user_int_variables.size(); i++){
+                    if(left_side.value.equals(user_int_variables.get(i).name)){
+                        left = user_int_variables.get(i).value;
+                        total  = left - right;
+                        user_int_variables.get(i).value = total;
+                    }
+                }
+                break;
+        }
     }
 }

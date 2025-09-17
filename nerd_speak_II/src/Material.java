@@ -1,7 +1,7 @@
 public class Material{
     public String name;
-    public String value;
-    public Material(String name, String value){
+    public int value;
+    public Material(String name, int value){
         this.name = name;
         this.value = value;
     }

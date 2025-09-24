@@ -40,10 +40,19 @@ public class Interpreter {
 
             case PLUS:
                 do_addition();
+                break;
 
             case MINUS:
                 do_subtraction();
+                break;
 
+            case MULTIPLY:
+                do_multiplication();
+                break;
+            
+            case DIVIDE:
+                do_division();
+                break;
          }
     }
 
@@ -162,7 +171,7 @@ public class Interpreter {
         Token right_side = the_stack.pop();
         int left = 0;
         int right = 0;
-        int total = 0;
+        int difference = 0;
 
         //check to see what is being added to 
         switch(left_side.type){
@@ -172,8 +181,55 @@ public class Interpreter {
                 for(int i = 0; i < user_int_variables.size(); i++){
                     if(left_side.value.equals(user_int_variables.get(i).name)){
                         left = user_int_variables.get(i).value;
-                        total  = left - right;
-                        user_int_variables.get(i).value = total;
+                        difference  = left - right;
+                        user_int_variables.get(i).value = difference;
+                    }
+                }
+                break;
+        }
+    }
+    public static void do_multiplication(){
+        //define variables for addition
+        Token left_side = the_stack.pop();
+        Token right_side = the_stack.pop();
+        int left = 0;
+        int right = 0;
+        int product = 0;
+
+        //check to see what is being added to 
+        switch(left_side.type){
+            case IDENTIFIER: 
+                right = get_dice_value(right_side);
+                right = generate_number(right);
+                for(int i = 0; i < user_int_variables.size(); i++){
+                    if(left_side.value.equals(user_int_variables.get(i).name)){
+                        left = user_int_variables.get(i).value;
+                        product  = left * right;
+                        user_int_variables.get(i).value = product;
+                    }
+                }
+                break;
+        }
+    }
+
+    public static void do_division(){
+        //define variables for addition
+        Token left_side = the_stack.pop();
+        Token right_side = the_stack.pop();
+        int left = 0;
+        int right = 0;
+        int quotient = 0;
+
+        //check to see what is being added to 
+        switch(left_side.type){
+            case IDENTIFIER: 
+                right = get_dice_value(right_side);
+                right = generate_number(right);
+                for(int i = 0; i < user_int_variables.size(); i++){
+                    if(left_side.value.equals(user_int_variables.get(i).name)){
+                        left = user_int_variables.get(i).value;
+                        quotient  = left / right;
+                        user_int_variables.get(i).value = quotient;
                     }
                 }
                 break;

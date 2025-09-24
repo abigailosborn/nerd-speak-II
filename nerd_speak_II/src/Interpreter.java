@@ -5,6 +5,7 @@ public class Interpreter {
     public static Stack<Token> the_stack = new Stack<Token>();
     public static ArrayList<Verbal> user_String_variables = new ArrayList<Verbal>();
     public static ArrayList<Material> user_int_variables = new ArrayList<Material>();
+    public static ArrayList<BagOfHolding> user_arrays = new ArrayList<BagOfHolding>();
     public static void main(String[] args){
         Parser parse = new Parser();
         parse.parse_code();
@@ -16,10 +17,13 @@ public class Interpreter {
             parse_token(working_token);
             if(the_stack.size() > 0){
                 working_token = the_stack.pop();
-            }
-            
+            }   
         }
-
+        for(int i = 0; i < user_arrays.size(); i++){
+            for(int j = 0; j < user_arrays.get(i).value.size(); i++){
+                System.out.println(user_arrays.get(i).value);
+            }
+        }
     }
     public static void parse_token(Token current_token){
         //store the value of the token being currently looked at 
@@ -37,7 +41,13 @@ public class Interpreter {
                     message();
                 }
                 break;
-
+            //set up arrays 
+            case BAG_OF_HOLDING:
+                Token array_name = the_stack.pop();
+                ArrayList<String> create_array = new ArrayList<String>();
+                BagOfHolding ary = new BagOfHolding(array_name.value, create_array);
+                user_arrays.add(ary);
+                break;
             case PLUS:
                 do_addition();
                 break;
@@ -126,7 +136,7 @@ public class Interpreter {
     }
 
     public static void assign_variables(){
-        //get the name and the value for the variable
+        //get the name for the variable
         Token variable_name = the_stack.pop();
         Token variable_value = the_stack.pop();
         //make variable to store the assignment 
@@ -140,6 +150,11 @@ public class Interpreter {
                 Material new_int_variable = new Material(variable_name.value, dice_value);
                 user_int_variables.add(new_int_variable);
                 break;
+            //create array variables and store them in an arraylist to reference at a later time
+            /*case BAG_OF_HOLDING:
+                BagOfHolding new_array_variable = new BagOfHolding(variable_name.value, null);
+                user_arrays.add(new_array_variable);
+                break;*/
         }
     }
     public static void do_addition(){

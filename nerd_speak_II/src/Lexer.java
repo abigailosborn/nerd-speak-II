@@ -87,7 +87,7 @@ public class Lexer{
                 else if(words[i].equals("cast")){
                     tokens.add(new Token(Token.TokenType.FUNCTION_CALL, "funny"));
                 }
-                else if(words[i].equals("bag_of_holding")){
+                else if(words[i].equals("bag-of-holding")){
                     tokens.add(new Token(Token.TokenType.BAG_OF_HOLDING, "array"));
                 }
                 //store other words, the parser will handle this later 

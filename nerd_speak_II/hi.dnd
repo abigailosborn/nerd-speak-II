@@ -1,10 +1,5 @@
-strength roll d20
-athletics roll * hello world *
-I cast message
-material_component strength
-strength decompose d12
-I cast message
-material_component strength
-I cast message
-verbal_component athletics
+I cast mesaage 
+verbal_component * hi *
+bag-of-holding gold
+I put strength in gold
 I cast fireball

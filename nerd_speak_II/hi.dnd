@@ -1,5 +1,7 @@
-I cast mesaage 
-verbal_component * hi *
-bag-of-holding gold
-I put strength in gold
+strength roll * hi *
+I cast message
+material_component strength
+bag-of-holding bag1
+I put * dog * in bag1
+I put d12 in bag1
 I cast fireball

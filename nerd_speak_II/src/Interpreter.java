@@ -19,11 +19,11 @@ public class Interpreter {
                 working_token = the_stack.pop();
             }   
         }
-        for(int i = 0; i < user_arrays.size(); i++){
+        /*for(int i = 0; i < user_arrays.size(); i++){
             for(int j = 0; j < user_arrays.get(i).value.size(); i++){
                 System.out.println(user_arrays.get(i).value);
             }
-        }
+        }*/
     }
     public static void parse_token(Token current_token){
         //store the value of the token being currently looked at 
@@ -40,6 +40,9 @@ public class Interpreter {
                 if(function_name.value.equals("message")){
                     message();
                 }
+                break;
+            case ARRAY_FUNCTION:
+                do_array_functions();
                 break;
             //set up arrays 
             case BAG_OF_HOLDING:
@@ -248,6 +251,48 @@ public class Interpreter {
                     }
                 }
                 break;
+        }
+    }
+
+    public static void do_array_functions(){
+        Token obj = the_stack.pop();
+        Token op = the_stack.pop();
+        Token array = the_stack.pop();
+        //if you are adding to the array
+        //TODO:  you currently can not add Integers to Arrays
+        if(op.value.equals("in")){
+            for(int i = 0; i < user_arrays.size(); i++){
+                if(array.value.equals(user_arrays.get(i).name)){
+                    switch(obj.type){
+                        case DICE:
+                            user_arrays.get(i).value.add(Integer.toString(get_dice_value(obj)));
+                            break;
+                        case LANGUAGE:
+                            user_arrays.get(i).value.add(obj.value);
+                            break;
+                        case IDENTIFIER:
+                            for(int j = 0; j < user_String_variables.size(); j++){
+                                if((user_String_variables.get(i).name).equals(obj.value)){
+                                    user_arrays.get(j).value.add(user_String_variables.get(j).value);
+                                }
+                            }
+                            for(int k = 0; k < user_int_variables.size(); k++){
+                                if((user_int_variables.get(i).name).equals(obj.value)){
+                                    user_arrays.get(k).value.add(Integer.toString(user_int_variables.get(k).value));
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        //check if you are removing from the array
+        else if(op.value.equals("from")){
+            for(int i = 0; i < user_arrays.size(); i++){
+                if(array.value.equals(user_arrays.get(i).name)){
+                    user_arrays.get(i).value.remove(obj.value);
+                }
+            }
         }
     }
 }

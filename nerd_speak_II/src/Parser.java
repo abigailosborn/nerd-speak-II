@@ -6,7 +6,7 @@ public class Parser {
     public static ArrayList<Token> token_list;
     public static int counter = 0;
     public static Stack<Token> the_stack_tm = new Stack<Token>();
-    public static void parse_code(){
+    public void parse_code(){
         //Grab the token list from the lexer
         Lexer lex = new Lexer();
         lex.lex_text();
@@ -50,6 +50,14 @@ public class Parser {
                     the_stack_tm.push(token_list.get(i - 1));
                     the_stack_tm.push(token_list.get(i));
                     break;
+
+                case ARRAY_FUNCTION:
+                    the_stack_tm.push(token_list.get(i - 3));
+                    the_stack_tm.push(token_list.get(i - 2));
+                    the_stack_tm.push(token_list.get(i - 1));
+                    the_stack_tm.push(token_list.get(i));
+                    break;
+                    
                 case BAG_OF_HOLDING:
                     the_stack_tm.push(token_list.get(i - 1));
                     the_stack_tm.push(token_list.get(i));

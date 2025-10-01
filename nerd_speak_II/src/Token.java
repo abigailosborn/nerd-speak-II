@@ -12,7 +12,8 @@ public class Token {
         TILDE,
         COMMA,
         FUNCTION_CALL,
-        BAG_OF_HOLDING
+        BAG_OF_HOLDING,
+        ARRAY_FUNCTION
     }
 
     public final TokenType type;

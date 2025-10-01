@@ -9,7 +9,7 @@ public class Lexer{
     public static Scanner file_scan;
     public static final String FILE_NAME = "hi.dnd";
     public static ArrayList<Token> tokens = new ArrayList<Token>();
-    public static void lex_text(){
+    public void lex_text(){
         //read in the file for the lexer
         get_file_extension(FILE_NAME);
         if(file_extension.equals("dnd")){
@@ -87,6 +87,12 @@ public class Lexer{
                 else if(words[i].equals("cast")){
                     tokens.add(new Token(Token.TokenType.FUNCTION_CALL, "funny"));
                 }
+                else if(words[i].equals("put")){
+                    tokens.add(new Token(Token.TokenType.ARRAY_FUNCTION, "funny"));
+                }
+                else if(words[i].equals("take")){
+                    tokens.add(new Token(Token.TokenType.ARRAY_FUNCTION, "funny"));
+                }
                 else if(words[i].equals("bag-of-holding")){
                     tokens.add(new Token(Token.TokenType.BAG_OF_HOLDING, "array"));
                 }
@@ -105,6 +111,7 @@ public class Lexer{
             System.out.println(token.type + " " + token.value);
         } 
         */
+        file_scan.close();
 
     }
     public static void read_input(String file_name){
@@ -124,5 +131,4 @@ public class Lexer{
         String[] temp = file_name.split("\\.");
         file_extension = temp[1];
     }
-
 }

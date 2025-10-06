@@ -9,7 +9,15 @@ public class Interpreter {
     public static void main(String[] args){
         Parser parse = new Parser();
         parse.parse_code();
-        the_stack = parse.the_stack_tm;
+        parse_stack(parse.the_stack_tm);
+        /*for(int i = 0; i < user_arrays.size(); i++){
+            for(int j = 0; j < user_arrays.get(i).value.size(); i++){
+                System.out.println(user_arrays.get(i).value);
+            }
+        }*/
+    }
+    public static void parse_stack(Stack<Token> stack){
+        the_stack = stack;
         //if(the_stack.size() > 0){
         Token working_token = the_stack.pop();
         //iterate through and parse each stack token
@@ -66,6 +74,80 @@ public class Interpreter {
             case DIVIDE:
                 do_division();
                 break;
+            
+            case WOW:
+                Token duration_amount = the_stack.pop();
+                Token start_tilde = the_stack.pop();
+                //Token temp = the_stack.pop();
+                boolean if_conditional = true;
+                int duration_int = 0;
+                Stack<Token> temp_stack = new Stack<Token>();
+                ArrayList<Token> temp_array = new ArrayList<Token>();
+                switch(duration_amount.type){
+                    //if the duration amount is a number calculate the number
+                    case DICE:
+                        duration_int = get_dice_value(duration_amount);
+                        break;
+
+                    case BOOLEAN:
+                        if(duration_amount.value.equals("on")){
+                            if_conditional = true;
+                        }
+                        //If the boolean is false, do not run 
+                        else if(duration_amount.value.equals("off")){
+                            if_conditional = false;
+                        }
+                    case IDENTIFIER:
+                        //get the integer variable and save the value in int 
+                        for(int i = 0; i < user_int_variables.size(); i++){
+                            if(user_int_variables.get(i).name.equals(duration_amount.value)){
+                                duration_int = user_int_variables.get(i).value;
+                            }
+                        }
+                        break;
+                }
+                //iterate through while there is no second tilde 
+                Token curr = the_stack.pop();
+                while(!curr.value.equals("~")){
+                    //create a new temp array for the code that is being repeated, we are making it an array so it is easily reversable 
+                    temp_array.add(curr);
+                    curr = the_stack.pop();
+                }
+                //create the stack by reversing the arraylist 
+                for(int i = temp_array.size() -1; i >= 0; i--){
+                    temp_stack.add(temp_array.get(i));
+                }
+                //if there is an integer instead of a boolean
+                if(duration_int > 0){
+                    for(int j = 0; j < duration_int; j++){
+                        if(temp_stack.size() == 0 ){
+                            for(int i = temp_array.size() -1; i >= 0; i--){
+                                temp_stack.add(temp_array.get(i));
+                            }
+                        }
+                        parse_stack(temp_stack);
+                    }
+                }
+                else if(if_conditional){
+                    while(true){
+                        if(temp_stack.size() == 0 ){
+                            for(int i = temp_array.size() -1; i >= 0; i--){
+                                temp_stack.add(temp_array.get(i));
+                            }
+                        }
+                        parse_stack(temp_stack);
+                    }
+                }
+                //else{
+                    //break;
+                //}
+                
+                /*System.out.println("New Stack");
+                while(temp_stack.size() > 0){
+                    System.out.println(temp_stack.pop().value);
+                }*/
+                //break; 
+            
          }
     }
 

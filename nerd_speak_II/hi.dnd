@@ -1,7 +1,6 @@
-strength roll * hi *
+strength roll d10
+duration strength ~
 I cast message
 material_component strength
-bag-of-holding bag1
-I put * dog * in bag1
-I put d12 in bag1
+~
 I cast fireball

@@ -9,11 +9,12 @@ public class Token {
         DIVIDE,
         KEYWORD,
         EQUAL,
-        TILDE,
-        COMMA,
         FUNCTION_CALL,
+        TILDE,
         BAG_OF_HOLDING,
-        ARRAY_FUNCTION
+        ARRAY_FUNCTION,
+        BOOLEAN,
+        WOW
     }
 
     public final TokenType type;

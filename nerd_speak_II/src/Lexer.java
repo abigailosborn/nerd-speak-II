@@ -40,19 +40,21 @@ public class Lexer{
                     //create a token for this variable
                     tokens.add(new Token(Token.TokenType.DICE, words[i]));
                 }
+                if(words[i].equals("on") || words[i].equals("off")){
+                    //create a token for this variable
+                    tokens.add(new Token(Token.TokenType.BOOLEAN, words[i]));
+                }
                 else if(words[i].equals("*")){
                     if(!seen_star){
                         String str = "";
                         //while there is not another asterix add each word to the value of the Token
                         while(words.length > i + 1 && !words[i + 1].equals("*")){
                             str += words[i + 1];
-                            
                             //add in spaces after each word
                             i++;
                             if(!words[i + 1].equals("*")){
                                 str += " ";
                             }
-                            
                         }
                         tokens.add(new Token(Token.TokenType.LANGUAGE, str));
                     }
@@ -77,24 +79,20 @@ public class Lexer{
                 else if(words[i].equals("roll")){
                     tokens.add(new Token(Token.TokenType.EQUAL, "="));
                 }
-                //this is the equivalent of (), it is for FUNCTION CALLS
-                else if(words[i].equals("/*")){
-                    tokens.add(new Token(Token.TokenType.TILDE, "~"));
-                }
-                else if(words[i].equals(",")){
-                    tokens.add(new Token(Token.TokenType.COMMA, ","));
-                }
                 else if(words[i].equals("cast")){
                     tokens.add(new Token(Token.TokenType.FUNCTION_CALL, "funny"));
                 }
-                else if(words[i].equals("put")){
-                    tokens.add(new Token(Token.TokenType.ARRAY_FUNCTION, "funny"));
-                }
-                else if(words[i].equals("take")){
+                else if(words[i].equals("put") || words[i].equals("take")){
                     tokens.add(new Token(Token.TokenType.ARRAY_FUNCTION, "funny"));
                 }
                 else if(words[i].equals("bag-of-holding")){
                     tokens.add(new Token(Token.TokenType.BAG_OF_HOLDING, "array"));
+                }
+                else if(words[i].equals("~")){
+                    tokens.add(new Token(Token.TokenType.TILDE, "~"));
+                }
+                else if(words[i].equals("duration")){
+                    tokens.add(new Token(Token.TokenType.WOW, "wow"));
                 }
                 //store other words, the parser will handle this later 
                 else{

@@ -62,6 +62,15 @@ public class Parser {
                     the_stack_tm.push(token_list.get(i - 1));
                     the_stack_tm.push(token_list.get(i));
                     break;
+                //TODO: WOKR ON LOOPS
+                case TILDE:
+                    the_stack_tm.push(token_list.get(i));
+                    break;
+                case WOW:
+                    the_stack_tm.push(token_list.get(i - 1));
+                    the_stack_tm.push(token_list.get(i));
+                    break;
+
             }
         }
         return the_stack_tm;

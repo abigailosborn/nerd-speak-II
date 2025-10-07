@@ -1,6 +1,7 @@
-strength roll d10
-duration strength ~
+strength roll d4
+duration d20 ~
+strength bless d10
+~
 I cast message
 material_component strength
-~
 I cast fireball

@@ -6,8 +6,8 @@ public class Interpreter {
     public static ArrayList<Verbal> user_String_variables = new ArrayList<Verbal>();
     public static ArrayList<Material> user_int_variables = new ArrayList<Material>();
     public static ArrayList<BagOfHolding> user_arrays = new ArrayList<BagOfHolding>();
+    public static Parser parse = new Parser();
     public static void main(String[] args){
-        Parser parse = new Parser();
         parse.parse_code();
         parse_stack(parse.the_stack_tm);
         /*for(int i = 0; i < user_arrays.size(); i++){
@@ -137,6 +137,9 @@ public class Interpreter {
                         }
                         parse_stack(temp_stack);
                     }
+                }
+                if(parse.the_stack_tm.size() > 0 ){
+                    parse_stack(parse.the_stack_tm);
                 }
                 //else{
                     //break;

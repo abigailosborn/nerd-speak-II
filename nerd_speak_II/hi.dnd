@@ -1,7 +1,8 @@
-strength roll d4
-duration d20 ~
-strength bless d10
-~
-I cast message
+wisdom roll d12
+bag-of-holding bag1
+I put wisdom in bag1
+strength roll
+count items in bag1
+I cast message 
 material_component strength
 I cast fireball

@@ -128,8 +128,10 @@ public class Interpreter {
                         parse_stack(temp_stack);
                     }
                 }
+                //If it is a while true loop
                 else if(if_conditional){
                     while(true){
+                        //if the temp stack is empty refill it 
                         if(temp_stack.size() == 0 ){
                             for(int i = temp_array.size() -1; i >= 0; i--){
                                 temp_stack.add(temp_array.get(i));
@@ -138,13 +140,11 @@ public class Interpreter {
                         parse_stack(temp_stack);
                     }
                 }
+                //If the main stack still has Tokens continue to run it 
                 if(parse.the_stack_tm.size() > 0 ){
                     parse_stack(parse.the_stack_tm);
                 }
-                //else{
-                    //break;
-                //}
-                
+                break;
                 /*System.out.println("New Stack");
                 while(temp_stack.size() > 0){
                     System.out.println(temp_stack.pop().value);
@@ -237,6 +237,25 @@ public class Interpreter {
                 int dice_value = get_dice_value(variable_value);
                 Material new_int_variable = new Material(variable_name.value, dice_value);
                 user_int_variables.add(new_int_variable);
+                break;
+            case ARRAY_FUNCTION:
+                Token trash = the_stack.pop();
+                Token items = the_stack.pop();
+                Token in = the_stack.pop();
+                Token arr_name = the_stack.pop();
+                ArrayList<String> temp = new ArrayList<String>();
+                BagOfHolding user_array = new BagOfHolding(null, temp);
+                int size = 0;
+                for(int i = 0; i < user_arrays.size(); i++){
+                    if(user_arrays.get(i).name.equals(arr_name.value)){
+                        user_array = user_arrays.get(i);
+                    }
+                }
+                for(int k = 0; k < user_array.value.size(); k++){
+                    size += 1;
+                }
+                Material new_int_var = new Material(variable_name.value, size);
+                user_int_variables.add(new_int_var);
                 break;
             //create array variables and store them in an arraylist to reference at a later time
             /*case BAG_OF_HOLDING:

@@ -76,74 +76,8 @@ public class Interpreter {
                 break;
             
             case WOW:
-                Token duration_amount = the_stack.pop();
-                Token start_tilde = the_stack.pop();
-                //Token temp = the_stack.pop();
-                boolean if_conditional = true;
-                int duration_int = 0;
-                Stack<Token> temp_stack = new Stack<Token>();
-                ArrayList<Token> temp_array = new ArrayList<Token>();
-                switch(duration_amount.type){
-                    //if the duration amount is a number calculate the number
-                    case DICE:
-                        duration_int = get_dice_value(duration_amount);
-                        break;
-
-                    case BOOLEAN:
-                        if(duration_amount.value.equals("on")){
-                            if_conditional = true;
-                        }
-                        //If the boolean is false, do not run 
-                        else if(duration_amount.value.equals("off")){
-                            if_conditional = false;
-                        }
-                    case IDENTIFIER:
-                        //get the integer variable and save the value in int 
-                        for(int i = 0; i < user_int_variables.size(); i++){
-                            if(user_int_variables.get(i).name.equals(duration_amount.value)){
-                                duration_int = user_int_variables.get(i).value;
-                            }
-                        }
-                        break;
-                }
+                do_while();
                 //iterate through while there is no second tilde 
-                Token curr = the_stack.pop();
-                while(!curr.value.equals("~")){
-                    //create a new temp array for the code that is being repeated, we are making it an array so it is easily reversable 
-                    temp_array.add(curr);
-                    curr = the_stack.pop();
-                }
-                //create the stack by reversing the arraylist 
-                for(int i = temp_array.size() -1; i >= 0; i--){
-                    temp_stack.add(temp_array.get(i));
-                }
-                //if there is an integer instead of a boolean
-                if(duration_int > 0){
-                    for(int j = 0; j < duration_int; j++){
-                        if(temp_stack.size() == 0 ){
-                            for(int i = temp_array.size() -1; i >= 0; i--){
-                                temp_stack.add(temp_array.get(i));
-                            }
-                        }
-                        parse_stack(temp_stack);
-                    }
-                }
-                //If it is a while true loop
-                else if(if_conditional){
-                    while(true){
-                        //if the temp stack is empty refill it 
-                        if(temp_stack.size() == 0 ){
-                            for(int i = temp_array.size() -1; i >= 0; i--){
-                                temp_stack.add(temp_array.get(i));
-                            }
-                        }
-                        parse_stack(temp_stack);
-                    }
-                }
-                //If the main stack still has Tokens continue to run it 
-                if(parse.the_stack_tm.size() > 0 ){
-                    parse_stack(parse.the_stack_tm);
-                }
                 break;
                 /*System.out.println("New Stack");
                 while(temp_stack.size() > 0){
@@ -363,7 +297,6 @@ public class Interpreter {
         Token op = the_stack.pop();
         Token array = the_stack.pop();
         //if you are adding to the array
-        //TODO:  you currently can not add Integers to Arrays
         if(op.value.equals("in")){
             for(int i = 0; i < user_arrays.size(); i++){
                 if(array.value.equals(user_arrays.get(i).name)){
@@ -397,6 +330,77 @@ public class Interpreter {
                     user_arrays.get(i).value.remove(obj.value);
                 }
             }
+        }
+    }
+
+    public static void do_while(){
+        Token duration_amount = the_stack.pop();
+        Token start_tilde = the_stack.pop();
+        //Token temp = the_stack.pop();
+        boolean if_conditional = true;
+        int duration_int = 0;
+        Stack<Token> temp_stack = new Stack<Token>();
+        ArrayList<Token> temp_array = new ArrayList<Token>();
+        switch(duration_amount.type){
+            //if the duration amount is a number calculate the number
+            case DICE:
+                duration_int = get_dice_value(duration_amount);
+                break;
+
+            case BOOLEAN:
+                if(duration_amount.value.equals("on")){
+                    if_conditional = true;
+                }
+                //If the boolean is false, do not run 
+                else if(duration_amount.value.equals("off")){
+                    if_conditional = false;
+                }
+            case IDENTIFIER:
+                //get the integer variable and save the value in int 
+                for(int i = 0; i < user_int_variables.size(); i++){
+                    if(user_int_variables.get(i).name.equals(duration_amount.value)){
+                        duration_int = user_int_variables.get(i).value;
+                    }
+                }
+                break;
+        }
+        //iterate through while there is no second tilde 
+        Token curr = the_stack.pop();
+        while(!curr.value.equals("~")){
+            //create a new temp array for the code that is being repeated, we are making it an array so it is easily reversable 
+            temp_array.add(curr);
+            curr = the_stack.pop();
+        }
+        //create the stack by reversing the arraylist 
+        for(int i = temp_array.size() -1; i >= 0; i--){
+            temp_stack.add(temp_array.get(i));
+        }
+        //if there is an integer instead of a boolean
+        if(duration_int > 0){
+            for(int j = 0; j < duration_int; j++){
+                if(temp_stack.size() == 0 ){
+                    for(int i = temp_array.size() -1; i >= 0; i--){
+                        temp_stack.add(temp_array.get(i));
+                    }
+                }
+                parse_stack(temp_stack);
+            }
+        }
+        //If it is a while true loop
+        else if(if_conditional){
+            while(true){
+                //if the temp stack is empty refill it 
+                if(temp_stack.size() == 0 ){
+                    for(int i = temp_array.size() -1; i >= 0; i--){
+                        temp_stack.add(temp_array.get(i));
+                    }
+                }
+                parse_stack(temp_stack);
+            }
+        }
+        //If the main stack still has Tokens continue to run it 
+        if(parse.the_stack_tm.size() > 0 ){
+            parse_stack(parse.the_stack_tm);
         }
     }
 }

@@ -1,6 +1,8 @@
-wisdom roll d12
+wisdom roll d4
 bag-of-holding bag1
 I put wisdom in bag1
+I put d12 in bag1
+I put * hi * in bag1
 strength roll
 count items in bag1
 I cast message 

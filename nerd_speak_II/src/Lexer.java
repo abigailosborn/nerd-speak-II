@@ -40,7 +40,7 @@ public class Lexer{
                     //create a token for this variable
                     tokens.add(new Token(Token.TokenType.DICE, words[i]));
                 }
-                if(words[i].equals("on") || words[i].equals("off")){
+                else if(words[i].equals("on") || words[i].equals("off")){
                     //create a token for this variable
                     tokens.add(new Token(Token.TokenType.BOOLEAN, words[i]));
                 }

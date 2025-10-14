@@ -5,6 +5,9 @@ I put d12 in bag1
 I put * hi * in bag1
 strength roll
 count items in bag1
+show items in bag1
+I take * hi * from bag1
+show items in bag1
 I cast message 
 material_component strength
 I cast fireball

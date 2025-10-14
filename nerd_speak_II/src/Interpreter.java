@@ -50,7 +50,7 @@ public class Interpreter {
                 }
                 break;
             case ARRAY_FUNCTION:
-                do_array_functions();
+                do_array_functions(current_token.value);
                 break;
             //set up arrays 
             case BAG_OF_HOLDING:
@@ -292,12 +292,12 @@ public class Interpreter {
         }
     }
 
-    public static void do_array_functions(){
+    public static void do_array_functions(String function_name){
         Token obj = the_stack.pop();
         Token op = the_stack.pop();
         Token array = the_stack.pop();
         //if you are adding to the array
-        if(op.value.equals("in")){
+        if(function_name.equals("put")){
             for(int i = 0; i < user_arrays.size(); i++){
                 if(array.value.equals(user_arrays.get(i).name)){
                     switch(obj.type){
@@ -324,12 +324,27 @@ public class Interpreter {
             }
         }
         //check if you are removing from the array
-        else if(op.value.equals("from")){
+        //TODO: check if this works
+        else if(function_name.equals("take")){
             for(int i = 0; i < user_arrays.size(); i++){
                 if(array.value.equals(user_arrays.get(i).name)){
                     user_arrays.get(i).value.remove(obj.value);
                 }
             }
+        }
+        else if(function_name.equals("show")){
+            ArrayList<String> temp = new ArrayList<String>();
+            for(int i = 0; i < user_arrays.size(); i++){
+                if(array.value.equals(user_arrays.get(i).name)){
+                    temp = user_arrays.get(i).value;
+                }
+            }
+            System.out.print("[");
+            for(int j = 0; j < temp.size()-1; j++){
+                System.out.print(temp.get(j) + ", ");
+            }
+            System.out.print(temp.get(temp.size()-1));
+            System.out.println("]");
         }
     }
 

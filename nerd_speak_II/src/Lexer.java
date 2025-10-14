@@ -82,8 +82,8 @@ public class Lexer{
                 else if(words[i].equals("cast")){
                     tokens.add(new Token(Token.TokenType.FUNCTION_CALL, "funny"));
                 }
-                else if(words[i].equals("put") || words[i].equals("take") || words[i].equals("count")){
-                    tokens.add(new Token(Token.TokenType.ARRAY_FUNCTION, "funny"));
+                else if(words[i].equals("put") || words[i].equals("take") || words[i].equals("count") || words[i].equals("show")){
+                    tokens.add(new Token(Token.TokenType.ARRAY_FUNCTION, words[i]));
                 }
                 else if(words[i].equals("bag-of-holding")){
                     tokens.add(new Token(Token.TokenType.BAG_OF_HOLDING, "array"));

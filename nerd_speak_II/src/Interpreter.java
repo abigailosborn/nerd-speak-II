@@ -161,7 +161,53 @@ public class Interpreter {
         //get the name for the variable
         Token variable_name = the_stack.pop();
         Token variable_value = the_stack.pop();
-        //make variable to store the assignment 
+        //check if the variable already exists, if it does, merely reassign the value
+        switch(variable_value.type){
+            case LANGUAGE:
+                for(int i = 0; i < user_String_variables.size(); i++){
+                    if(variable_name.value.equals(user_String_variables.get(i).name)){
+                        user_String_variables.get(i).value = variable_value.value;
+                    }
+                    else{
+                        make_new_variable(variable_name, variable_value);
+                    }
+                }
+                if(user_String_variables.size() == 0){
+                    make_new_variable(variable_name, variable_value);
+                }
+                break;
+            case DICE:
+                for(int i = 0; i < user_int_variables.size(); i++){
+                    if(variable_name.value.equals(user_int_variables.get(i).name)){
+                        int dice_value = get_dice_value(variable_value);
+                        user_int_variables.get(i).value = dice_value;
+                    }
+                    else{
+                        make_new_variable(variable_name, variable_value);
+                    }
+                }
+                if(user_int_variables.size() == 0){
+                    make_new_variable(variable_name, variable_value);
+                }
+                break;
+            case BAG_OF_HOLDING:
+                for(int i = 0; i < user_arrays.size(); i++){
+                    if(variable_name.value.equals(user_arrays.get(i).name)){
+                        ArrayList<String> temp = new ArrayList<String>();
+                        user_arrays.get(i).value = temp;
+                    }
+                    else{
+                        make_new_variable(variable_name, variable_value);
+                    }
+                }
+                if(user_arrays.size() == 0){
+                    make_new_variable(variable_name, variable_value);
+                }
+                break;
+        }
+    }
+
+    public static void make_new_variable(Token variable_name, Token variable_value){
         switch(variable_value.type){
             case LANGUAGE:
                 Verbal new_String_variable = new Verbal(variable_name.value, variable_value.value);

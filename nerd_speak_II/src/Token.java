@@ -14,7 +14,11 @@ public class Token {
         BAG_OF_HOLDING,
         ARRAY_FUNCTION,
         BOOLEAN,
-        WOW
+        WOW,
+        EQUALSEQUALS,
+        LEFTANGLEBRACE,
+        RIGHTANGLEBRACE,
+        CONS
     }
 
     public final TokenType type;

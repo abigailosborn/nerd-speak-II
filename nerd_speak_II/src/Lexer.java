@@ -94,6 +94,18 @@ public class Lexer{
                 else if(words[i].equals("duration")){
                     tokens.add(new Token(Token.TokenType.WOW, "wow"));
                 }
+                else if(words[i].equals("DC")){
+                    tokens.add(new Token(Token.TokenType.EQUALSEQUALS, "=="));
+                }
+                else if(words[i].equals("<")){
+                    tokens.add(new Token(Token.TokenType.LEFTANGLEBRACE, "<"));
+                }
+                else if(words[i].equals(">")){
+                    tokens.add(new Token(Token.TokenType.RIGHTANGLEBRACE, ">"));
+                }
+                else if(words[i].equals("action")){
+                    tokens.add(new Token(Token.TokenType.CONS, "cons"));
+                }
                 //store other words, the parser will handle this later 
                 else{
                     tokens.add(new Token(Token.TokenType.IDENTIFIER, words[i]));

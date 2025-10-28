@@ -67,6 +67,23 @@ public class Parser {
                     the_stack_tm.push(token_list.get(i - 1));
                     the_stack_tm.push(token_list.get(i));
                     break;
+                case EQUALSEQUALS:
+                    the_stack_tm.push(token_list.get(i - 1));
+                    the_stack_tm.push(token_list.get(i + 1));
+                    the_stack_tm.push(token_list.get(i));
+                    break;
+                case LEFTANGLEBRACE:
+                    the_stack_tm.push(token_list.get(i));
+                    break;
+                case RIGHTANGLEBRACE:
+                    the_stack_tm.push(token_list.get(i));
+                    break;
+                case CONS:
+                    the_stack_tm.push(token_list.get(i));
+                    break;
+                case BOOLEAN:
+                    the_stack_tm.push(token_list.get(i));
+                    break;
 
             }
         }

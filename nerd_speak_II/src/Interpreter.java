@@ -84,6 +84,180 @@ public class Interpreter {
                     System.out.println(temp_stack.pop().value);
                 }*/
                 //break; 
+
+            case CONS:
+                Token condition = the_stack.pop();
+                Token start_brace = null;
+                boolean bool = true;
+
+                Token left_side = null;
+                Token equalsequals = null;
+                Token right_side = null;
+                switch(condition.type){
+                    //if your condition is a boolean
+                    case BOOLEAN:
+                        //get the value of the boolean 
+                        String bool_value = condition.value;
+                        if(bool_value.equals("on")){
+                            bool = true;
+                        }
+                        else if(bool_value.equals("off")){
+                            bool = false;
+                        }
+                        else{
+                            System.out.println("Invalid boolean type");
+                        }
+                        //find the start of the code 
+                        start_brace = the_stack.pop();
+
+                        break;
+                    default:
+                        equalsequals = condition;
+                        left_side = the_stack.pop();
+                        right_side = the_stack.pop();
+                        //find the start of the code 
+                        start_brace = the_stack.pop();
+                        break;
+                }
+                ArrayList<Token> temp_array = new ArrayList<Token>();
+                Stack<Token> temp_stack = new Stack<Token>();
+                //if there is a starting brace
+                if(!start_brace.equals(null)){
+                    Token curr = the_stack.pop();
+                    while(!curr.value.equals(">")){
+                        //create a new temp array for the code that is being repeated, we are making it an array so it is easily reversable 
+                        temp_array.add(curr);
+                        curr = the_stack.pop();
+                    }
+                    //create the stack by reversing the arraylist 
+                    for(int i = temp_array.size() -1; i >= 0; i--){
+                        temp_stack.add(temp_array.get(i));
+                    }
+                }
+                switch(left_side.type){
+                    case BOOLEAN:
+                        if(bool){
+                            parse_stack(temp_stack);
+                        }
+                        break;
+                    
+                    case IDENTIFIER:
+                        String string_value = "";
+                        int int_value = 0;
+                        for(int i = 0; i < user_String_variables.size(); i++){
+                            if((user_String_variables.get(i).name).equals(left_side.value)){
+                                string_value = user_String_variables.get(i).value;
+                            }
+                        }
+                        //Check to see if the variable is an integer variable amd grab it if it is 
+                        for(int k = 0; k < user_int_variables.size(); k++){
+                            if((user_int_variables.get(k).name).equals(left_side.value)){
+                                int_value = user_int_variables.get(k).value;
+                            }
+                        }
+                        switch(right_side.type){
+                            case IDENTIFIER:
+                                String second_string = "";
+                                int second_int = 0;
+                                if(!string_value.equals("")){
+                                    for(int i = 0; i < user_String_variables.size(); i++){
+                                        if((user_String_variables.get(i).name).equals(left_side.value)){
+                                            second_string = user_String_variables.get(i).value;
+                                        }
+                                    }
+                                    if(string_value.equals(second_string)){
+                                        parse_stack(temp_stack);
+                                    }
+                                }
+                                if(int_value != 0){
+                                    //Check to see if the variable is an integer variable amd grab it if it is 
+                                    for(int k = 0; k < user_int_variables.size(); k++){
+                                        if((user_int_variables.get(k).name).equals(left_side.value)){
+                                            second_int = user_int_variables.get(k).value;
+                                        }
+                                    }
+                                    if(int_value == second_int){
+                                        parse_stack(temp_stack);
+                                    }
+                                }
+                                break;
+                            
+                            case LANGUAGE:
+                                String third_string = "";
+                                for(int i = 0; i < user_String_variables.size(); i++){
+                                        if((user_String_variables.get(i).name).equals(left_side.value)){
+                                            third_string = user_String_variables.get(i).value;
+                                        }
+                                    }
+                                    if(string_value.equals(third_string)){
+                                        parse_stack(temp_stack);
+                                    }
+                                break;
+
+                            case DICE:
+                                    int third_int = 0;
+                                for(int k = 0; k < user_int_variables.size(); k++){
+                                        if((user_int_variables.get(k).name).equals(left_side.value)){
+                                            third_int = user_int_variables.get(k).value;
+                                        }
+                                    }
+                                    if(int_value == third_int){
+                                        parse_stack(temp_stack);
+                                    }
+                                break;
+                        }
+                        break;
+
+                    case LANGUAGE:
+                        String right_string_value = "";
+                        switch(right_side.type){
+                            case IDENTIFIER:
+                                for(int i = 0; i < user_String_variables.size(); i++){
+                                    if((user_String_variables.get(i).name).equals(right_side.value)){
+                                        right_string_value = user_String_variables.get(i).value;
+                                    }
+                                }
+                                if(left_side.value.equals(right_string_value)){
+                                    parse_stack(temp_stack);
+                                }
+                                break;
+                            case LANGUAGE:
+                                if(left_side.value.equals(right_side.value)){
+                                    parse_stack(temp_stack);
+                                }
+                                break;
+                        }
+                        break;
+
+                    case DICE:
+                        int dice_value = get_dice_value(left_side);
+                        switch(right_side.type){
+                            case DICE:
+                                int second_die = get_dice_value(right_side);
+                                if(dice_value == second_die){
+                                    parse_stack(temp_stack);
+                                }
+                                break;
+                            case IDENTIFIER:
+                                int third_die = 0;
+                                for(int i = 0; i < user_int_variables.size(); i++){
+                                    if((user_int_variables.get(i).name).equals(right_side.value)){
+                                        third_die = user_int_variables.get(i).value;
+                                    }
+                                }
+                                System.out.println("Left side: " + dice_value);
+                                System.out.println("Right side: " + third_die);
+                                if(third_die == dice_value){
+                                    parse_stack(temp_stack);
+                                }
+                                break;
+                        }
+                        break;
+                }
+                if(parse.the_stack_tm.size() > 0 ){
+                    parse_stack(parse.the_stack_tm);
+                }
+                break;
             
          }
     }
@@ -347,18 +521,23 @@ public class Interpreter {
             for(int i = 0; i < user_arrays.size(); i++){
                 if(array.value.equals(user_arrays.get(i).name)){
                     switch(obj.type){
+                        //If you are adding an integer
                         case DICE:
                             user_arrays.get(i).value.add(Integer.toString(get_dice_value(obj)));
                             break;
+                        //If you are adding a String 
                         case LANGUAGE:
                             user_arrays.get(i).value.add(obj.value);
                             break;
+                        //If you are adding a variable
                         case IDENTIFIER:
+                            //Check to see if the variable is a string variable amd grab it if it is 
                             for(int j = 0; j < user_String_variables.size(); j++){
                                 if((user_String_variables.get(i).name).equals(obj.value)){
                                     user_arrays.get(j).value.add(user_String_variables.get(j).value);
                                 }
                             }
+                            //Check to see if the variable is an integer variable amd grab it if it is 
                             for(int k = 0; k < user_int_variables.size(); k++){
                                 if((user_int_variables.get(i).name).equals(obj.value)){
                                     user_arrays.get(k).value.add(Integer.toString(user_int_variables.get(k).value));
@@ -386,10 +565,15 @@ public class Interpreter {
                 }
             }
             System.out.print("[");
-            for(int j = 0; j < temp.size()-1; j++){
-                System.out.print(temp.get(j) + ", ");
+            //Check is array size is greater than zero, if not print empty square brackets
+            if(temp.size() > 0){
+                //print everything but the last object in the array separated by commas 
+                for(int j = 0; j < temp.size()-1; j++){
+                    System.out.print(temp.get(j) + ", ");
+                }
+                //print out the last object in the array
+                System.out.print(temp.get(temp.size()-1));
             }
-            System.out.print(temp.get(temp.size()-1));
             System.out.println("]");
         }
     }
